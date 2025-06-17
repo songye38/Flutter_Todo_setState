@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models/todo_item.dart';
+import 'services/api_service.dart';
 import 'widgets/todo_item_widget.dart';
 
 void main() => runApp(MyApp());
@@ -10,23 +11,41 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List<TodoItem> todos = [
-    TodoItem(id: 1, text: '첫 번째 할 일'),
-    TodoItem(id: 2, text: '두 번째 할 일'),
-    TodoItem(id: 3, text: '세 번째 할 일'),
-  ];
-
+  List<TodoItem> todos = []; // 초기값 비워둠
   final TextEditingController _controller = TextEditingController();
-  int _nextId = 4;
 
-  void _addTodo() {
+  @override
+  void initState() {
+    super.initState();
+    _loadTodosFromServer(); // 앱 시작 시 서버 데이터 불러오기
+  }
+
+  Future<void> _loadTodosFromServer() async {
+    try {
+      final fetchedTodos = await ApiService.fetchTodos();
+      setState(() {
+        todos = fetchedTodos;
+      });
+    } catch (e) {
+      print('Failed to load todos: $e');
+      // 에러 처리: 토스트 띄우거나 등등
+    }
+  }
+
+  void _addTodo() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
 
-    setState(() {
-      todos.add(TodoItem(id: _nextId++, text: text));
-      _controller.clear();
-    });
+    try {
+      final newTodo = await ApiService.addTodo(text);
+      setState(() {
+        todos.add(newTodo);
+        _controller.clear();
+      });
+    } catch (e) {
+      print('Failed to add todo: $e');
+      // 에러 처리
+    }
   }
 
   @override
