@@ -45,6 +45,7 @@ Checkbox(
   },
 ),
 ```
+![시연 장면](screenRecording/STEP_2.gif)
 
 ---
 
@@ -62,7 +63,9 @@ IconButton(
   },
 ),
 ```
+![시연 장면](screenRecording/STEP_3.gif)
 
+---
 
 ## Step 4: ✏️ 할 일 수정 기능 추가하기
 
@@ -96,6 +99,7 @@ onTap: () async {
   }
 },
 ```
+![시연 장면](screenRecording/STEP_4.gif)
 
 ---
 
@@ -135,6 +139,7 @@ showAppToast(context, '삭제되었습니다!', backgroundColor: Colors.red, ico
 showAppToast(context, '수정 완료!');
 showAppToast(context, '할 일이 추가되었습니다!');
 ```
+![시연 장면](screenRecording/STEP_5.gif)
 
 ---
 
@@ -164,4 +169,6 @@ Widget build(BuildContext context) {
   );
 }
 ```
+
+![시연 장면](screenRecording/STEP_6.gif)
 
