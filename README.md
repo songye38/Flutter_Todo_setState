@@ -25,6 +25,7 @@ ListView(
   children: todos.map((todo) => Text(todo.text)).toList(),
 );
 ```
+![시연 장면](screenRecording/STEP_1.gif)
 
 ---
 
