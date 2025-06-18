@@ -54,6 +54,20 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  void _handleTodoToggle(TodoItem updatedTodo) async {
+    try {
+      final updated = await ApiService.updateIsDone(updatedTodo.id, updatedTodo.done);
+      setState(() {
+        final index = todos.indexWhere((t) => t.id == updated.id);
+        if (index != -1) {
+          todos[index] = updated;
+        }
+      });
+    } catch (e) {
+      print('할 일 업데이트 실패: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -64,7 +78,10 @@ class _MyAppState extends State<MyApp> {
             Expanded(
               child: ListView(
                 children: todos
-                    .map((todo) => TodoItemWidget(todo: todo))
+                    .map((todo) => TodoItemWidget(
+                    todo: todo,
+                    onChanged: _handleTodoToggle,
+                  ))
                     .toList(),
               ),
             ),
