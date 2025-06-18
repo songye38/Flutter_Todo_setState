@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import '../models/todo_item.dart';
 import '../services/api_service.dart';
 import '../widgets/todo_item_widget.dart';
+import '../utils/show_toast.dart';
 
 class TodoScreen extends StatefulWidget {
   @override
@@ -25,6 +25,7 @@ class _TodoScreenState extends State<TodoScreen> {
       setState(() {
         todos = fetchedTodos;
       });
+      showAppToast(context, '데이터를 성공적으로 불러왔습니다.!');
     } catch (e) {
       print('Failed to load todos: $e');
     }
@@ -40,6 +41,8 @@ class _TodoScreenState extends State<TodoScreen> {
         todos.add(newTodo);
         _controller.clear();
       });
+      showAppToast(context, '할 일이 추가되었습니다!');
+
     } catch (e) {
       print('Failed to add todo: $e');
     }
@@ -74,13 +77,17 @@ class _TodoScreenState extends State<TodoScreen> {
       setState(() {
         todos.removeWhere((t) => t.id == todoToDelete.id);
       });
+      showAppToast(context, '할 일이 삭제되었습니다!');
+
     } catch (e) {
       print('Todo Item 삭제 실패: $e');
     }
   }
 
   void _editTodoTitle(TodoItem todo) async {
-    final TextEditingController editController = TextEditingController(text: todo.text);
+    final TextEditingController editController = TextEditingController(
+      text: todo.text,
+    );
 
     final newTitle = await showDialog<String>(
       context: context,
@@ -114,6 +121,7 @@ class _TodoScreenState extends State<TodoScreen> {
           todos[index] = updated;
         }
       });
+      showAppToast(context, '할 일이 수정되었습니다!');
     } catch (e) {
       print('Todo 제목 수정 실패: $e');
     }
