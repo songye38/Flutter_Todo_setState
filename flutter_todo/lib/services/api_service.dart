@@ -48,6 +48,20 @@ class ApiService {
     }
   }
 
+  static Future<TodoItem> updateTodoTitle(int id, String TodoTitle) async {
+    final response = await http.patch(
+      Uri.parse('$baseUrl/todos/$id'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'title': TodoTitle}),
+    );
+
+    if (response.statusCode == 200) {
+      return TodoItem.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to update todo');
+    }
+  }
+
   static Future<void> deleteTodo(int id) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/todos/$id'),
