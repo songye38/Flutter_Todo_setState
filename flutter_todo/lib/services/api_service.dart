@@ -33,8 +33,7 @@ class ApiService {
     }
   }
 
-
-// 할 일 is_done 상태 수정하기
+  // 할 일 is_done 상태 수정하기
   static Future<TodoItem> updateIsDone(int id, bool isDone) async {
     final response = await http.patch(
       Uri.parse('$baseUrl/todos/$id'),
@@ -49,4 +48,14 @@ class ApiService {
     }
   }
 
+  static Future<void> deleteTodo(int id) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/todos/$id'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete todo');
+    }
+  }
 }

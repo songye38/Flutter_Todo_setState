@@ -56,7 +56,10 @@ class _MyAppState extends State<MyApp> {
 
   void _handleTodoToggle(TodoItem updatedTodo) async {
     try {
-      final updated = await ApiService.updateIsDone(updatedTodo.id, updatedTodo.done);
+      final updated = await ApiService.updateIsDone(
+        updatedTodo.id,
+        updatedTodo.done,
+      );
       setState(() {
         final index = todos.indexWhere((t) => t.id == updated.id);
         if (index != -1) {
@@ -65,6 +68,17 @@ class _MyAppState extends State<MyApp> {
       });
     } catch (e) {
       print('할 일 업데이트 실패: $e');
+    }
+  }
+
+  void _deleteTodoItem(TodoItem todoToDelete) async {
+    try {
+      await ApiService.deleteTodo(todoToDelete.id);
+      setState(() {
+        todos.removeWhere((t) => t.id == todoToDelete.id);
+      });
+    } catch (e) {
+      print('Todo Item 삭제 실패: $e');
     }
   }
 
@@ -78,10 +92,13 @@ class _MyAppState extends State<MyApp> {
             Expanded(
               child: ListView(
                 children: todos
-                    .map((todo) => TodoItemWidget(
-                    todo: todo,
-                    onChanged: _handleTodoToggle,
-                  ))
+                    .map(
+                      (todo) => TodoItemWidget(
+                        todo: todo,
+                        onChanged: _handleTodoToggle,
+                        onDelete: _deleteTodoItem, // 삭제 핸들러 추가
+                      ),
+                    )
                     .toList(),
               ),
             ),
